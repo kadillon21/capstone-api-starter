@@ -10,6 +10,6 @@ import org.yearup.models.Category;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer>
 {
-    @Query("SELECT name FROM categories")
+    @Query(value = "SELECT name FROM categories", nativeQuery = true)
     List<Category> findAllCategories();
 }
