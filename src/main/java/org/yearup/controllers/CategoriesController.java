@@ -61,7 +61,7 @@ public class CategoriesController
         return productService.listByCategoryId(categoryId);
     }
 
-    @PostMapping("{id}")
+    @PostMapping("")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Category> addCategory(@RequestBody Category category)
     {
@@ -88,6 +88,6 @@ public class CategoriesController
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         categoryService.delete(id);
-        return ResponseEntity.noContent().build(); 
+        return ResponseEntity.ok().build();
     }
 }
