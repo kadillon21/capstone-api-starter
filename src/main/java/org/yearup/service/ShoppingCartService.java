@@ -42,5 +42,10 @@ public class ShoppingCartService
         return shoppingCart;
     }
 
+    public CartItem add(CartItem cartItem) {
+        cartItem.setCartItemId(0);
+        return shoppingCartRepository.save(cartItem);
+    } 
+
     // add additional methods here
 }
