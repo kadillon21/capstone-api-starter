@@ -1,5 +1,10 @@
 package org.yearup.controllers;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.yearup.models.ShoppingCart;
 import org.yearup.models.User;
 import org.yearup.service.ShoppingCartService;
@@ -18,6 +23,8 @@ public class ShoppingCartController
 
 
     // each method in this controller requires a Principal object as a parameter
+    @GetMapping("")
+    @PreAuthorize("permitAll()")
     public ShoppingCart getCart(Principal principal)
     {
         // get the currently logged in username
@@ -27,20 +34,33 @@ public class ShoppingCartController
         int userId = user.getId();
 
         // use the shoppingCartService to get all items in the cart and return the cart
-        return null;
+        return shoppingCartService.getByUserId(userId);
     }
 
     // add a POST method to add a product to the cart - the url should be
     // https://localhost:8080/cart/products/15  (15 is the productId to be added)
     // return the updated cart with status 201 Created
 
+    @PostMapping("{id}")
+    @PreAuthorize("permitAll()")
+    public ShoppingCart addProduct (Principal principal, int id){
+       return null; 
+    }
 
     // add a PUT method to update an existing product in the cart - the url should be
     // https://localhost:8080/cart/products/15  (15 is the productId to be updated)
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated; return the cart (200 OK)
-
+    @PutMapping("{id}")
+    @PreAuthorize("permitAll()")
+    public ShoppingCart updateProduct (Principal principal, int id) {
+        return null;
+    }
 
     // add a DELETE method to clear all products from the current users cart
     // https://localhost:8080/cart  - return the (now empty) cart so the front end can refresh it (200 OK)
-
+    @DeleteMapping("{id}")
+    @PreAuthorize("permitAll()")
+    public ShoppingCart deleteProdcut (Principal principal, int id) {
+        return null;
+    }
 }

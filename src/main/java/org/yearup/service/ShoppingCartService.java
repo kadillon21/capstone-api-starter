@@ -1,7 +1,13 @@
 package org.yearup.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
+import org.yearup.models.CartItem;
 import org.yearup.models.ShoppingCart;
+import org.yearup.models.ShoppingCartItem;
 import org.yearup.repository.ShoppingCartRepository;
 
 @Service
@@ -20,7 +26,20 @@ public class ShoppingCartService
     public ShoppingCart getByUserId(int userId)
     {
         // load the user's cart rows, look up each product, and build the ShoppingCart
-        return null;
+        List<CartItem> cartItems = shoppingCartRepository.findByUserId(userId); 
+        Map<Integer, ShoppingCartItem> shoppingCartItems = new HashMap<>();
+
+        int i = 0;
+        for (CartItem cartItem : cartItems) {
+            i++;
+            ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+            shoppingCartItem.setProduct(productService.getById(cartItem.getProductId()));
+            shoppingCartItems.put(i, shoppingCartItem);
+        }
+         
+        ShoppingCart shoppingCart = new ShoppingCart(); 
+        shoppingCart.setItems(shoppingCartItems);
+        return shoppingCart;
     }
 
     // add additional methods here
