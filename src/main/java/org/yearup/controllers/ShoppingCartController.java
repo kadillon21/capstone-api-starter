@@ -1,5 +1,6 @@
 package org.yearup.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties.Apiversion.Use;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +31,9 @@ import java.security.Principal;
 public class ShoppingCartController
 {
     // a shopping cart controller depends on the service layer
+    @Autowired
     private ShoppingCartService shoppingCartService;
+    @Autowired
     private UserService userService;
 
 
@@ -37,22 +41,28 @@ public class ShoppingCartController
     // each method in this controller requires a Principal object as a parameter
     @GetMapping("")
     @PreAuthorize("permitAll()")
-    public ShoppingCart getCart(Principal principal)
+    public ResponseEntity<ShoppingCart> getCart(Principal principal)
     {
+        if (principal == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
         int userId = getUserID(principal);
-        // use the shoppingCartService to get all items in the cart and return the cart
-        return shoppingCartService.getByUserId(userId);
+        
+        return ResponseEntity.ok(shoppingCartService.getByUserId(userId));
     }
 
     // add a POST method to add a product to the cart - the url should be
     // https://localhost:8080/cart/products/15  (15 is the productId to be added)
     // return the updated cart with status 201 Created
 
-    @PostMapping("/products/{id}")
+    @PostMapping("/products/{productId}")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<CartItem> addProduct (Principal principal, @RequestBody CartItem cartItem){
-        CartItem saved = shoppingCartService.add(cartItem);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    public ResponseEntity<CartItem> addProduct (Principal principal, @PathVariable int productId){
+        if (principal == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.add(productId, getUserID(principal)));
     }
 
     // add a PUT method to update an existing product in the cart - the url should be
@@ -60,7 +70,7 @@ public class ShoppingCartController
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated; return the cart (200 OK)
     @PutMapping("{id}")
     @PreAuthorize("permitAll()")
-    public ShoppingCart updateProduct (Principal principal, int id) {
+    public ShoppingCart updateProduct (Principal principal, @PathVariable int id) {
         int userId = getUserID(principal);
         return null;
     }

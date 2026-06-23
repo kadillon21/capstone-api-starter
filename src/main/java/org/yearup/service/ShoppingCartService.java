@@ -42,8 +42,13 @@ public class ShoppingCartService
         return shoppingCart;
     }
 
-    public CartItem add(CartItem cartItem) {
+    public CartItem add(int productId, int userId) {
+
+        CartItem cartItem = new CartItem();
         cartItem.setCartItemId(0);
+        cartItem.setProductId(productId);
+        cartItem.setUserId(userId);
+
         return shoppingCartRepository.save(cartItem);
     } 
 
