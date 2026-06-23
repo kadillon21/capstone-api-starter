@@ -52,5 +52,18 @@ public class ShoppingCartService
         return shoppingCartRepository.save(cartItem);
     } 
 
-    // add additional methods here
+    public CartItem update(int productId, int userId, int quantity) {
+
+        CartItem existing = shoppingCartRepository.findByUserIdAndProductId(userId, productId);
+        existing.setQuantity(quantity);
+        return shoppingCartRepository.save(existing);
+    } 
+
+    public void delete(int userId) {
+        List<CartItem> cartItems = shoppingCartRepository.findByUserId(userId);
+
+        for (CartItem cartItem : cartItems) {
+            shoppingCartRepository.deleteById(cartItem.getCartItemId());          
+           }
+    }
 }
