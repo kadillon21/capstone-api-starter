@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yearup.models.CartItem;
 import org.yearup.models.ShoppingCart;
+import org.yearup.models.UpdateCartItemDto;
 import org.yearup.models.User;
 import org.yearup.service.ShoppingCartService;
 import org.yearup.service.UserService;
@@ -63,13 +64,13 @@ public class ShoppingCartController
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated; return the cart (200 OK)
     @PutMapping("/products/{productId}")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<CartItem> updateProduct (Principal principal, @PathVariable int productId, @RequestBody int quantity) {
+    public ResponseEntity<CartItem> updateProduct (Principal principal, @PathVariable int productId, @RequestBody UpdateCartItemDto request) {
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         int userId = getUserID(principal);
         
-        return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.update(productId, userId, quantity));
+        return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.update(productId, userId, request.getQuantity()));
     }
 
     // add a DELETE method to clear all products from the current users cart
