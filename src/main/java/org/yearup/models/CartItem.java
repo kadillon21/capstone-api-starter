@@ -18,7 +18,7 @@ public class CartItem
     private int productId;
 
     @Column(name = "quantity")
-    private int quantity;
+    private int quantity = 1;
 
     public int getCartItemId()
     {

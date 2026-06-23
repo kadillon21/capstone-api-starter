@@ -28,6 +28,7 @@ public class ShoppingCartService
         // load the user's cart rows, look up each product, and build the ShoppingCart
         List<CartItem> cartItems = shoppingCartRepository.findByUserId(userId); 
         Map<Integer, ShoppingCartItem> shoppingCartItems = new HashMap<>();
+        ShoppingCart shoppingCart = new ShoppingCart(); 
 
         int i = 0;
         for (CartItem cartItem : cartItems) {
@@ -38,40 +39,44 @@ public class ShoppingCartService
             shoppingCartItems.put(i, shoppingCartItem);
         }
          
-        ShoppingCart shoppingCart = new ShoppingCart(); 
         shoppingCart.setItems(shoppingCartItems);
         return shoppingCart;
     }
 
-    public CartItem add(int productId, int userId) {
+    public ShoppingCart add(int productId, int userId) {
 
+        // Checks if product is already in users cart if and if it is increases the quantity by one.
         if (shoppingCartRepository.findByUserIdAndProductId(userId, productId) != null){
             CartItem existing = shoppingCartRepository.findByUserIdAndProductId(userId, productId);
             int quantity = existing.getQuantity();
             existing.setQuantity(quantity += 1);
-            return shoppingCartRepository.save(existing);
+            shoppingCartRepository.save(existing);
+            return getByUserId(userId);
         }
         
         CartItem cartItem = new CartItem();
         cartItem.setCartItemId(0);
         cartItem.setProductId(productId);
         cartItem.setUserId(userId);
+        shoppingCartRepository.save(cartItem);
 
-        return shoppingCartRepository.save(cartItem);
+        return getByUserId(userId);
     } 
 
-    public CartItem update(int productId, int userId, int quantity) {
+    public ShoppingCart update(int productId, int userId, int quantity) {
 
         CartItem existing = shoppingCartRepository.findByUserIdAndProductId(userId, productId);
         existing.setQuantity(quantity);
-        return shoppingCartRepository.save(existing);
+        shoppingCartRepository.save(existing);
+        return getByUserId(userId);
     } 
 
-    public void delete(int userId) {
+    public ShoppingCart delete(int userId) {
         List<CartItem> cartItems = shoppingCartRepository.findByUserId(userId);
 
         for (CartItem cartItem : cartItems) {
             shoppingCartRepository.deleteById(cartItem.getCartItemId());          
            }
+        return getByUserId(userId);
     }
 }

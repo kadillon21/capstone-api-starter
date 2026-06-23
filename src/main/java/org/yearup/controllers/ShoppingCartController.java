@@ -50,7 +50,7 @@ public class ShoppingCartController
 
     @PostMapping("/products/{productId}")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<CartItem> addProduct (Principal principal, @PathVariable int productId){
+    public ResponseEntity<ShoppingCart> addProduct (Principal principal, @PathVariable int productId){
         if (principal == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
@@ -64,7 +64,7 @@ public class ShoppingCartController
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated; return the cart (200 OK)
     @PutMapping("/products/{productId}")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<CartItem> updateProduct (Principal principal, @PathVariable int productId, @RequestBody UpdateCartItemDto request) {
+    public ResponseEntity<ShoppingCart> updateProduct (Principal principal, @PathVariable int productId, @RequestBody UpdateCartItemDto request) {
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
@@ -77,9 +77,8 @@ public class ShoppingCartController
     // https://localhost:8080/cart  - return the (now empty) cart so the front end can refresh it (200 OK)
     @DeleteMapping("")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<Void> deleteProdcut (Principal principal) {
-        shoppingCartService.delete(getUserID(principal));
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ShoppingCart> deleteProdcut (Principal principal) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.delete(getUserID(principal)));
     }
 
     private int getUserID (Principal principal) {
