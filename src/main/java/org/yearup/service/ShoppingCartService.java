@@ -34,6 +34,7 @@ public class ShoppingCartService
             i++;
             ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
             shoppingCartItem.setProduct(productService.getById(cartItem.getProductId()));
+            shoppingCartItem.setQuantity(cartItem.getQuantity());
             shoppingCartItems.put(i, shoppingCartItem);
         }
          
