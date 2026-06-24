@@ -26,6 +26,9 @@ public class OrderLineItem {
     @Column(name = "discount")
     private double discount;
     
+    public OrderLineItem(){
+
+    }
 
     public OrderLineItem(int orderLineItemId, int orderId, int productId, double salesPrice, int quantity, double discount){
         this.orderLineItemId = orderLineItemId;

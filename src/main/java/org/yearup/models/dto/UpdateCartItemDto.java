@@ -1,4 +1,4 @@
-package org.yearup.models;
+package org.yearup.models.dto;
 
 public class UpdateCartItemDto {
 

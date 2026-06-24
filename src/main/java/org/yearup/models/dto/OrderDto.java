@@ -1,22 +1,33 @@
 package org.yearup.models.dto;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 import org.yearup.models.OrderLineItem; 
+import org.yearup.models.Order;
 
 public class OrderDto {
     private int orderId;
     private int userId;
-    private LocalDate date;
+    private String date;
     private String address;
     private String city;
     private String state;
     private String zip;
-    private BigDecimal shippingAmount;
+    private double shippingAmount;
     private List<OrderLineItem> lineItems;
 
-    public OrderDto(int orderId, int userId, LocalDate date, String address, String city, String state, String zip, BigDecimal shippingAmount, List<OrderLineItem> lineItems){
+    public OrderDto(Order order, List<OrderLineItem> lineItems){
+        this.orderId = order.getOrderId();
+        this.userId = order.getUserId();
+        this.date = order.getDate();
+        this.address = order.getAddress();
+        this.city = order.getCity();
+        this.state = order.getState();
+        this.zip = order.getZip();
+        this.shippingAmount = order.getShippingAmount();
+        this.lineItems = lineItems;
+    }
+
+    public OrderDto(int orderId, int userId, String date, String address, String city, String state, String zip, double shippingAmount, List<OrderLineItem> lineItems){
         this.orderId = orderId;
         this.userId = userId;
         this.date = date;
@@ -44,11 +55,11 @@ public class OrderDto {
 		this.userId = userId;
 	}
 
-	public LocalDate getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 
@@ -84,11 +95,11 @@ public class OrderDto {
 		this.zip = zip;
 	}
 
-	public BigDecimal getShippingAmount() {
+	public double getShippingAmount() {
 		return shippingAmount;
 	}
 
-	public void setShippingAmount(BigDecimal shippingAmount) {
+	public void setShippingAmount(double shippingAmount) {
 		this.shippingAmount = shippingAmount;
 	}
 
