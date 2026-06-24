@@ -50,19 +50,21 @@ public class OrderService {
         order.setState(profile.getState());
         order.setZip(profile.getZip());
 
+        Order savedOrder = orderRepository.save(order);
+
         for(ShoppingCartItem item: cart.getItems().values()){
             OrderLineItem lineItem = new OrderLineItem();
-            lineItem.setOrderId(order.getOrderId());
+            lineItem.setOrderId(savedOrder.getOrderId());
             lineItem.setProductId(item.getProductId());
-            lineItem.setSalesPrice(cart.getTotal());
+            lineItem.setSalesPrice(item.getProduct().getPrice());
             lineItem.setQuantity(item.getQuantity());
             lineItem.setDiscount(item.getDiscountPercent());
             lineItems.add(lineItem);
             orderLineItemRepository.save(lineItem);
         }
 
-        shoppingCartService.delete(userId);
         orderRepository.save(order);
+        shoppingCartService.delete(userId);
 
         return new OrderDto(order, lineItems);
     }
