@@ -1,44 +1,22 @@
-package org.yearup.models;
+package org.yearup.models.dto;
 
-import jakarta.persistence.*;;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import org.yearup.models.OrderLineItem; 
 
-@Entity
-@Table(name = "orders")
-public class Order 
-{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_Id")
+public class OrderDto {
     private int orderId;
-
-    @Column(name = "user_Id")
     private int userId;
-
-    @Column(name = "date")
-    private String date;
-
-    @Column(name = "address")
+    private LocalDate date;
     private String address;
-
-    @Column(name = "city")
     private String city;
-
-    @Column(name = "state")
     private String state;
-
-    @Column(name = "zip")
     private String zip;
+    private BigDecimal shippingAmount;
+    private List<OrderLineItem> lineItems;
 
-    @Column(name = "shipping_amount")
-    private int shippingAmount;
-
-    public Order()
-    {
-    }
-
-    public Order(int orderId, int userId, String date, String address, String city, String state, String zip, int shippingAmount)
-    {
+    public OrderDto(int orderId, int userId, LocalDate date, String address, String city, String state, String zip, BigDecimal shippingAmount, List<OrderLineItem> lineItems){
         this.orderId = orderId;
         this.userId = userId;
         this.date = date;
@@ -47,6 +25,7 @@ public class Order
         this.state = state;
         this.zip = zip;
         this.shippingAmount = shippingAmount;
+        this.lineItems = lineItems;
     }
 
 	public int getOrderId() {
@@ -65,11 +44,11 @@ public class Order
 		this.userId = userId;
 	}
 
-	public String getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 
@@ -105,13 +84,20 @@ public class Order
 		this.zip = zip;
 	}
 
-	public int getShippingAmount() {
+	public BigDecimal getShippingAmount() {
 		return shippingAmount;
 	}
 
-	public void setShippingAmount(int shippingAmount) {
+	public void setShippingAmount(BigDecimal shippingAmount) {
 		this.shippingAmount = shippingAmount;
-	} 
-    
+	}
+
+	public List<OrderLineItem> getLineItems() {
+		return lineItems;
+	}
+
+	public void setLineItems(List<OrderLineItem> lineItems) {
+		this.lineItems = lineItems;
+	}
 
 }
