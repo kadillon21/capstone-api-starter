@@ -39,7 +39,7 @@ public class ShoppingCartController
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
-        int userId = getUserID(principal);
+        int userId = getUserId(principal);
         
         return ResponseEntity.ok(shoppingCartService.getByUserId(userId));
     }
@@ -55,7 +55,7 @@ public class ShoppingCartController
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
-        int userId = getUserID(principal);
+        int userId = getUserId(principal);
         return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.add(productId, userId));
     }
 
@@ -68,7 +68,7 @@ public class ShoppingCartController
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        int userId = getUserID(principal);
+        int userId = getUserId(principal);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.update(productId, userId, request.getQuantity()));
     }
@@ -78,10 +78,10 @@ public class ShoppingCartController
     @DeleteMapping("")
     @PreAuthorize("permitAll()")
     public ResponseEntity<ShoppingCart> deleteProdcut (Principal principal) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.delete(getUserID(principal)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.delete(getUserId(principal)));
     }
 
-    private int getUserID (Principal principal) {
+    private int getUserId (Principal principal) {
         String userName = principal.getName();
 
         User user = userService.getByUserName(userName);

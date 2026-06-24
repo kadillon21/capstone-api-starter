@@ -4,10 +4,7 @@ import java.security.Principal;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.yearup.service.ProfileService;
 import org.yearup.models.Profile;
 import org.yearup.models.User;
@@ -31,11 +28,19 @@ public class ProfileController
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Profile> getByUserId(Principal principal)
     {
-        int userId = getUserID(principal);
+        int userId = getUserId(principal);
         return ResponseEntity.ok(profileService.getByUserId(userId)); 
     }
 
-    private int getUserID (Principal principal) {
+    @PutMapping("")
+    @PreAuthorize("isAuthenticated")
+    public ResponseEntity<Profile> updateProfile(Principal principal, @RequestBody Profile profile)
+    {
+        int userId = getUserId(principal);
+        return ResponseEntity.ok(profileService.updateProfile(userId, profile));
+    }
+
+    private int getUserId (Principal principal) {
         String userName = principal.getName();
 
         User user = userService.getByUserName(userName);
