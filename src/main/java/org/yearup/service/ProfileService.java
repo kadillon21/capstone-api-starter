@@ -18,4 +18,10 @@ public class ProfileService
     {
         return profileRepository.save(profile);
     }
+
+    public Profile getByUserId(int userId)
+    {
+        Profile profile = profileRepository.getByUserId(userId);
+        return profile; 
+    }
 }
