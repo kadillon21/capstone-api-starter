@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.yearup.models.Order;
 import org.yearup.models.ShoppingCart;
@@ -27,8 +28,7 @@ public class OrderService {
             OrderRepository orderRepository, 
             ShoppingCartService shoppingCartService, 
             ProfileRepository profileRepository,
-            OrderLineItemRepository orderLineItemRepository)
-    {
+            OrderLineItemRepository orderLineItemRepository){
         this.orderRepository = orderRepository;
         this.shoppingCartService = shoppingCartService;
         this.profileRepository = profileRepository;
@@ -37,11 +37,21 @@ public class OrderService {
 
     public OrderDto checkOut(int userId){
 
-        LocalDate date = LocalDate.now();
         ShoppingCart cart = shoppingCartService.getByUserId(userId);
         Profile profile = profileRepository.findById(userId).orElseThrow();
-        List<OrderLineItem> lineItems = new ArrayList<>();
+
+        Order order = createOrder(userId, profile);
+        List<OrderLineItem> lineItems = createLineItems(cart, order);
+
+        shoppingCartService.delete(userId);
+
+        return new OrderDto(order, lineItems);
+    }
+
+    private Order createOrder(int userId, Profile profile){
+
         Order order = new Order();
+        LocalDate date = LocalDate.now();
 
         order.setUserId(userId);
         order.setDate(date.toString());
@@ -50,11 +60,17 @@ public class OrderService {
         order.setState(profile.getState());
         order.setZip(profile.getZip());
 
-        Order savedOrder = orderRepository.save(order);
+        orderRepository.save(order);
 
+        return order;
+    }
+
+    private List<OrderLineItem> createLineItems(ShoppingCart cart, Order order){
+        
+        List<OrderLineItem> lineItems = new ArrayList<>();
         for(ShoppingCartItem item: cart.getItems().values()){
             OrderLineItem lineItem = new OrderLineItem();
-            lineItem.setOrderId(savedOrder.getOrderId());
+            lineItem.setOrderId(order.getOrderId());
             lineItem.setProductId(item.getProductId());
             lineItem.setSalesPrice(item.getProduct().getPrice());
             lineItem.setQuantity(item.getQuantity());
@@ -63,10 +79,8 @@ public class OrderService {
             orderLineItemRepository.save(lineItem);
         }
 
-        orderRepository.save(order);
-        shoppingCartService.delete(userId);
-
-        return new OrderDto(order, lineItems);
+        return lineItems;
     }
+
     
 }

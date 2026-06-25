@@ -22,12 +22,14 @@ import java.security.Principal;
 public class ShoppingCartController
 {
     // a shopping cart controller depends on the service layer
-    @Autowired
     private ShoppingCartService shoppingCartService;
-    @Autowired
     private UserService userService;
 
 
+    public ShoppingCartController(ShoppingCartService shoppingCartService, UserService userService){
+        this.shoppingCartService = shoppingCartService;
+        this.userService = userService;
+    }
 
     // each method in this controller requires a Principal object as a parameter
     @GetMapping("")
