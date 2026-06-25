@@ -6,11 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yearup.models.ShoppingCart;
-import org.yearup.models.dto.UpdateCartItemDto;
 import org.yearup.models.User;
+import org.yearup.models.dto.UpdateCartItemDto;
 import org.yearup.service.ShoppingCartService;
 import org.yearup.service.UserService;
-
 
 import java.security.Principal;
 
@@ -34,14 +33,13 @@ public class ShoppingCartController
     // each method in this controller requires a Principal object as a parameter
     @GetMapping("")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ShoppingCart> getCart(Principal principal)
-    {
-        if (principal == null){
+    public ResponseEntity<ShoppingCart> getCart(Principal principal) {
+        if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
         int userId = getUserId(principal);
-        
+
         return ResponseEntity.ok(shoppingCartService.getByUserId(userId));
     }
 
@@ -51,8 +49,8 @@ public class ShoppingCartController
 
     @PostMapping("/products/{productId}")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ShoppingCart> addProduct (Principal principal, @PathVariable int productId){
-        if (principal == null){
+    public ResponseEntity<ShoppingCart> addProduct(Principal principal, @PathVariable int productId) {
+        if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
@@ -65,12 +63,12 @@ public class ShoppingCartController
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated; return the cart (200 OK)
     @PutMapping("/products/{productId}")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ShoppingCart> updateProduct (Principal principal, @PathVariable int productId, @RequestBody UpdateCartItemDto request) {
+    public ResponseEntity<ShoppingCart> updateProduct(Principal principal, @PathVariable int productId, @RequestBody UpdateCartItemDto request) {
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         int userId = getUserId(principal);
-        
+
         return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.update(productId, userId, request.getQuantity()));
     }
 
@@ -78,11 +76,11 @@ public class ShoppingCartController
     // https://localhost:8080/cart  - return the (now empty) cart so the front end can refresh it (200 OK)
     @DeleteMapping("")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ShoppingCart> deleteProdcut (Principal principal) {
+    public ResponseEntity<ShoppingCart> deleteProdcut(Principal principal) {
         return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.delete(getUserId(principal)));
     }
 
-    private int getUserId (Principal principal) {
+    private int getUserId(Principal principal) {
         String userName = principal.getName();
 
         User user = userService.getByUserName(userName);

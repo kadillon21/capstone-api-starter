@@ -4,8 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ECommerceApplication
-{
+public class ECommerceApplication {
 
     public static void main(String[] args) {
         String dbName = System.getenv("DB_NAME");

@@ -15,13 +15,11 @@ import java.util.List;
 @RestController
 @RequestMapping("categories")
 @CrossOrigin
-public class CategoriesController
-{
-    private CategoryService categoryService;
-    private ProductService productService;
+public class CategoriesController {
+    private final CategoryService categoryService;
+    private final ProductService productService;
 
-    public CategoriesController(CategoryService categoryService, ProductService productService)
-    {
+    public CategoriesController(CategoryService categoryService, ProductService productService) {
         this.categoryService = categoryService;
         this.productService = productService;
     }
@@ -29,8 +27,7 @@ public class CategoriesController
 
     @GetMapping("")
     @PreAuthorize("permitAll()")
-    public List<Category> getAll()
-    {
+    public List<Category> getAll() {
         if (categoryService.getAllCategories() == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
@@ -39,8 +36,7 @@ public class CategoriesController
 
     @GetMapping("{id}")
     @PreAuthorize("permitAll()")
-    public Category getById(@PathVariable int id)
-    {
+    public Category getById(@PathVariable int id) {
         Category category = categoryService.getById(id);
 
         if (category == null)
@@ -51,8 +47,7 @@ public class CategoriesController
 
     @GetMapping("{categoryId}/products")
     @PreAuthorize("permitAll()")
-    public List<Product> getProductsById(@PathVariable int categoryId)
-    {
+    public List<Product> getProductsById(@PathVariable int categoryId) {
         Category category = categoryService.getById(categoryId);
 
         if (category == null)
@@ -63,16 +58,14 @@ public class CategoriesController
 
     @PostMapping("")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Category> addCategory(@RequestBody Category category)
-    {
+    public ResponseEntity<Category> addCategory(@RequestBody Category category) {
         Category saved = categoryService.create(category);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @PutMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Category updateCategory(@PathVariable int id, @RequestBody Category category)
-    {
+    public Category updateCategory(@PathVariable int id, @RequestBody Category category) {
         if (categoryService.getById(id) == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
@@ -82,8 +75,7 @@ public class CategoriesController
 
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Void> deleteCategory(@PathVariable int id)
-    {
+    public ResponseEntity<Void> deleteCategory(@PathVariable int id) {
         if (categoryService.getById(id) == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 

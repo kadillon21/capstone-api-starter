@@ -1,7 +1,6 @@
 package org.yearup.controllers;
 
 import jakarta.validation.Valid;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +12,15 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import org.yearup.models.Profile;
-import org.yearup.service.ProfileService;
-import org.yearup.service.UserService;
+import org.yearup.models.User;
 import org.yearup.models.authentication.LoginDto;
 import org.yearup.models.authentication.LoginResponseDto;
 import org.yearup.models.authentication.RegisterUserDto;
-import org.yearup.models.User;
 import org.yearup.security.jwt.JWTFilter;
 import org.yearup.security.jwt.TokenProvider;
+import org.yearup.service.ProfileService;
+import org.yearup.service.UserService;
 
 @RestController
 @CrossOrigin
@@ -31,8 +29,8 @@ public class AuthenticationController {
 
     private final TokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
-    private UserService userService;
-    private ProfileService profileService;
+    private final UserService userService;
+    private final ProfileService profileService;
 
     public AuthenticationController(TokenProvider tokenProvider, AuthenticationManager authenticationManager, UserService userService, ProfileService profileService) {
         this.tokenProvider = tokenProvider;
@@ -43,8 +41,7 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginDto loginDto) {
-        try
-        {
+        try {
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
 
@@ -57,9 +54,7 @@ public class AuthenticationController {
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
             return new ResponseEntity<>(new LoginResponseDto(jwt, user), httpHeaders, HttpStatus.OK);
-        }
-        catch (AuthenticationException e)
-        {
+        } catch (AuthenticationException e) {
             // bad username/password -> 401 (not a 500)
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password.");
         }
@@ -70,8 +65,7 @@ public class AuthenticationController {
     public ResponseEntity<User> register(@Valid @RequestBody RegisterUserDto newUser) {
 
         boolean exists = userService.exists(newUser.getUsername());
-        if (exists)
-        {
+        if (exists) {
             // duplicate username -> 400 (not a 500)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User Already Exists.");
         }

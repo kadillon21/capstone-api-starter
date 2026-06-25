@@ -5,27 +5,23 @@ import org.yearup.models.Profile;
 import org.yearup.repository.ProfileRepository;
 
 @Service
-public class ProfileService
-{
+public class ProfileService {
     private final ProfileRepository profileRepository;
 
-    public ProfileService(ProfileRepository profileRepository)
-    {
+    public ProfileService(ProfileRepository profileRepository) {
         this.profileRepository = profileRepository;
     }
 
-    public Profile create(Profile profile)
-    {
+    public Profile create(Profile profile) {
         return profileRepository.save(profile);
     }
 
-    public Profile getByUserId(int userId)
-    {
+    public Profile getByUserId(int userId) {
         Profile profile = profileRepository.getByUserId(userId);
-        return profile; 
+        return profile;
     }
 
-    public Profile updateProfile(int userId, Profile profile){
+    public Profile updateProfile(int userId, Profile profile) {
         Profile existing = profileRepository.getByUserId(userId);
         existing.setFirstName(profile.getFirstName());
         existing.setLastName(profile.getLastName());

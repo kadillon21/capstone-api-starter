@@ -16,21 +16,21 @@ public class OrderLineItem {
 
     @Column(name = "product_id")
     private int productId;
- 
+
     @Column(name = "sales_price")
     private double salesPrice;
 
     @Column(name = "quantity")
     private int quantity;
- 
+
     @Column(name = "discount")
     private double discount;
-    
-    public OrderLineItem(){
+
+    public OrderLineItem() {
 
     }
 
-    public OrderLineItem(int orderLineItemId, int orderId, int productId, double salesPrice, int quantity, double discount){
+    public OrderLineItem(int orderLineItemId, int orderId, int productId, double salesPrice, int quantity, double discount) {
         this.orderLineItemId = orderLineItemId;
         this.orderId = orderId;
         this.productId = productId;
@@ -40,63 +40,63 @@ public class OrderLineItem {
     }
 
 
-	public int getOrderLineItemId() {
-		return orderLineItemId;
-	}
+    public int getOrderLineItemId() {
+        return orderLineItemId;
+    }
 
 
-	public void setOrderLineItemId(int orderLineItemId) {
-		this.orderLineItemId = orderLineItemId;
-	}
+    public void setOrderLineItemId(int orderLineItemId) {
+        this.orderLineItemId = orderLineItemId;
+    }
 
 
-	public int getOrderId() {
-		return orderId;
-	}
+    public int getOrderId() {
+        return orderId;
+    }
 
 
-	public void setOrderId(int orderId) {
-		this.orderId = orderId;
-	}
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
 
 
-	public int getProductId() {
-		return productId;
-	}
+    public int getProductId() {
+        return productId;
+    }
 
 
-	public void setProductId(int productId) {
-		this.productId = productId;
-	}
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
 
 
-	public double getSalesPrice() {
-		return salesPrice;
-	}
+    public double getSalesPrice() {
+        return salesPrice;
+    }
 
 
-	public void setSalesPrice(double salesPrice) {
-		this.salesPrice = salesPrice;
-	}
+    public void setSalesPrice(double salesPrice) {
+        this.salesPrice = salesPrice;
+    }
 
 
-	public int getQuantity() {
-		return quantity;
-	}
+    public int getQuantity() {
+        return quantity;
+    }
 
 
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
 
-	public double getDiscount() {
-		return discount;
-	}
+    public double getDiscount() {
+        return discount;
+    }
 
 
-	public void setDiscount(double discount) {
-		this.discount = discount;
-	}
-    
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
 }
