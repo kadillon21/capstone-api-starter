@@ -66,7 +66,7 @@ public class ShoppingCartController
     @DeleteMapping("")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ShoppingCart> deleteProdcut(Principal principal) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.delete(getUserId(principal)));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(shoppingCartService.delete(getUserId(principal)));
     }
 
     private int getUserId(Principal principal) {
