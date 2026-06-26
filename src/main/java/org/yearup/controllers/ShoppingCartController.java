@@ -1,6 +1,5 @@
 package org.yearup.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,12 +31,8 @@ public class ShoppingCartController
 
     // each method in this controller requires a Principal object as a parameter
     @GetMapping("")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ShoppingCart> getCart(Principal principal) {
-        if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
-
         int userId = getUserId(principal);
 
         return ResponseEntity.ok(shoppingCartService.getByUserId(userId));
@@ -48,13 +43,10 @@ public class ShoppingCartController
     // return the updated cart with status 201 Created
 
     @PostMapping("/products/{productId}")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ShoppingCart> addProduct(Principal principal, @PathVariable int productId) {
-        if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
-
         int userId = getUserId(principal);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.add(productId, userId));
     }
 
@@ -62,11 +54,8 @@ public class ShoppingCartController
     // https://localhost:8080/cart/products/15  (15 is the productId to be updated)
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated; return the cart (200 OK)
     @PutMapping("/products/{productId}")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ShoppingCart> updateProduct(Principal principal, @PathVariable int productId, @RequestBody UpdateCartItemDto request) {
-        if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
         int userId = getUserId(principal);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.update(productId, userId, request.getQuantity()));
@@ -75,15 +64,15 @@ public class ShoppingCartController
     // add a DELETE method to clear all products from the current users cart
     // https://localhost:8080/cart  - return the (now empty) cart so the front end can refresh it (200 OK)
     @DeleteMapping("")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ShoppingCart> deleteProdcut(Principal principal) {
         return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.delete(getUserId(principal)));
     }
 
     private int getUserId(Principal principal) {
         String userName = principal.getName();
-
         User user = userService.getByUserName(userName);
+
         return user.getId();
     }
 }

@@ -30,7 +30,7 @@ public class ProfileController {
     }
 
     @PutMapping("")
-    @PreAuthorize("isAuthenticated")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Profile> updateProfile(Principal principal, @RequestBody Profile profile) {
         int userId = getUserId(principal);
         return ResponseEntity.ok(profileService.updateProfile(userId, profile));
