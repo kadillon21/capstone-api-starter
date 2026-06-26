@@ -58,7 +58,7 @@ public class ShoppingCartController
     public ResponseEntity<ShoppingCart> updateProduct(Principal principal, @PathVariable int productId, @RequestBody UpdateCartItemDto request) {
         int userId = getUserId(principal);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.update(productId, userId, request.getQuantity()));
+        return ResponseEntity.ok(shoppingCartService.update(productId, userId, request.getQuantity()));
     }
 
     // add a DELETE method to clear all products from the current users cart
