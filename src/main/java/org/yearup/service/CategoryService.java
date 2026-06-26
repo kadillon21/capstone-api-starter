@@ -29,10 +29,12 @@ public class CategoryService {
 
     public Category update(int categoryId, Category category) {
         Category existing = categoryRepository.findById(categoryId).orElseThrow();
-        existing.setCategoryId(category.getCategoryId());
+
         existing.setName(category.getName());
         existing.setDescription(category.getDescription());
-        return null;
+        categoryRepository.save(existing);
+
+        return existing; 
     }
 
     public void delete(int categoryId) {

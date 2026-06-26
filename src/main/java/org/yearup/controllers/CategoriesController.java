@@ -27,33 +27,33 @@ public class CategoriesController {
 
     @GetMapping("")
     @PreAuthorize("permitAll()")
-    public List<Category> getAll() {
+    public ResponseEntity<List<Category>> getAll() {
         if (categoryService.getAllCategories() == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-        return categoryService.getAllCategories();
+        return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
     @GetMapping("{id}")
     @PreAuthorize("permitAll()")
-    public Category getById(@PathVariable int id) {
+    public ResponseEntity<Category> getById(@PathVariable int id) {
         Category category = categoryService.getById(id);
 
         if (category == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-        return category;
+        return ResponseEntity.ok(category);
     }
 
     @GetMapping("{categoryId}/products")
     @PreAuthorize("permitAll()")
-    public List<Product> getProductsById(@PathVariable int categoryId) {
+    public ResponseEntity<List<Product>> getProductsById(@PathVariable int categoryId) {
         Category category = categoryService.getById(categoryId);
 
         if (category == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-        return productService.listByCategoryId(categoryId);
+        return ResponseEntity.ok(productService.listByCategoryId(categoryId));
     }
 
     @PostMapping("")
@@ -65,11 +65,11 @@ public class CategoriesController {
 
     @PutMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Category updateCategory(@PathVariable int id, @RequestBody Category category) {
+    public ResponseEntity<Category> updateCategory(@PathVariable int id, @RequestBody Category category) {
         if (categoryService.getById(id) == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-        return categoryService.update(id, category);
+        return ResponseEntity.ok(categoryService.update(id, category));
     }
 
 
